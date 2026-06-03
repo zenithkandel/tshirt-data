@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - T-Shirt Collection</title>
+    <script src="https://zenithkandel.com.np/fontawesome/zenith-icons.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+
+    <!-- PIN Screen -->
+    <div id="pinScreen" class="pin-screen">
+        <div class="pin-card">
+            <div class="pin-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2>Admin Access</h2>
+            <p>Enter your PIN to continue</p>
+            <form id="pinForm" class="pin-form">
+                <input type="password" id="pinInput" maxlength="4" placeholder="_ _ _ _" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required>
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    <span>Enter</span>
+                </button>
+            </form>
+            <p id="pinError" class="pin-error hidden">Invalid PIN. Try again.</p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard hidden">
+        <header class="admin-header">
+            <div class="header-left">
+                <i class="fa-solid fa-shirt"></i>
+                <h1>Admin Panel</h1>
+            </div>
+            <div class="header-right">
+                <button onclick="refreshData()" class="icon-btn" title="Refresh">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+                <button onclick="exportCSV()" class="icon-btn" title="Export CSV">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <button onclick="logout()" class="icon-btn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalSubmissions">0</span>
+                        <span class="stat-label">Total Submissions</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-house-chimney"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalHouses">0</span>
+                        <span class="stat-label">Houses</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-ruler"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalSizes">0</span>
+                        <span class="stat-label">Unique Sizes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3><i class="fa-solid fa-house-chimney"></i> By House</h3>
+                    <div id="houseAnalytics" class="analytics-bars"></div>
+                </div>
+                <div class="analytics-card">
+                    <h3><i class="fa-solid fa-ruler"></i> By Size</h3>
+                    <div id="sizeAnalytics" class="analytics-bars"></div>
+                </div>
+            </div>
+
+            <!-- Submissions Table -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h3><i class="fa-solid fa-list"></i> Submissions</h3>
+                    <div class="table-controls">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchInput" placeholder="Search name or roll...">
+                        </div>
+                        <div class="sort-buttons">
+                            <button onclick="sortData('rollNumber')" class="sort-btn" id="sortRoll">
+                                <i class="fa-solid fa-arrow-down-1-9"></i>
+                                Roll No.
+                            </button>
+                            <button onclick="sortData('submittedAt')" class="sort-btn active" id="sortTime">
+                                <i class="fa-solid fa-clock"></i>
+                                Time
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="submissionsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Roll No.</th>
+                                <th>House</th>
+                                <th>Size</th>
+                                <th>Submitted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                    <div id="emptyState" class="empty-state hidden">
+                        <i class="fa-solid fa-inbox"></i>
+                        <p>No submissions yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PIN = '8023';
+        let allData = [];
+        let analytics = {};
+        let currentSort = 'submittedAt';
+        let sortDirection = 'desc';
+
+        // PIN Form
+        document.getElementById('pinForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('pinInput').value;
+            if (input === PIN) {
+                document.getElementById('pinScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                loadData();
+            } else {
+                document.getElementById('pinError').classList.remove('hidden');
+                document.getElementById('pinInput').value = '';
+                document.getElementById('pinInput').focus();
+            }
+        });
+
+        // Only allow numeric input in PIN field
+        document.getElementById('pinInput').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+
+        async function loadData() {
+            try {
+                const response = await fetch(`get-data.php?pin=${PIN}`);
+                const result = await response.json();
+                if (result.success) {
+                    allData = result.data;
+                    analytics = result.analytics;
+                    renderDashboard();
+                }
+            } catch (err) {
+                console.error('Failed to load data:', err);
+            }
+        }
+
+        function renderDashboard() {
+            // Stats
+            document.getElementById('totalSubmissions').textContent = analytics.total || 0;
+            document.getElementById('totalHouses').textContent = Object.keys(analytics.byHouse || {}).length;
+            document.getElementById('totalSizes').textContent = Object.keys(analytics.bySize || {}).length;
+
+            // House bars
+            renderBars('houseAnalytics', analytics.byHouse || {}, '#d4830a');
+            // Size bars
+            renderBars('sizeAnalytics', analytics.bySize || {}, '#c96b2a');
+
+            // Table
+            renderTable();
+        }
+
+        function renderBars(containerId, data, color) {
+            const container = document.getElementById(containerId);
+            const max = Math.max(...Object.values(data), 1);
+            container.innerHTML = Object.entries(data).map(([key, count]) => `
+                <div class="bar-row">
+                    <span class="bar-label">${key}</span>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: ${(count / max) * 100}%; background: ${color}"></div>
+                    </div>
+                    <span class="bar-count">${count}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            let filtered = allData.filter(entry =>
+                entry.name.toLowerCase().includes(searchTerm) ||
+                entry.rollNumber.toLowerCase().includes(searchTerm)
+            );
+
+            filtered.sort((a, b) => {
+                let valA, valB;
+                if (currentSort === 'rollNumber') {
+                    valA = a.rollNumber.toLowerCase();
+                    valB = b.rollNumber.toLowerCase();
+                    return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                } else {
+                    valA = new Date(a.submittedAt).getTime();
+                    valB = new Date(b.submittedAt).getTime();
+                    return sortDirection === 'asc' ? valA - valB : valB - valA;
+                }
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            tbody.innerHTML = filtered.map((entry, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${escapeHtml(entry.name)}</td>
+                    <td>${escapeHtml(entry.rollNumber)}</td>
+                    <td><span class="house-badge house-${entry.house.toLowerCase()}">${entry.house}</span></td>
+                    <td><span class="size-badge">${escapeHtml(entry.size)}</span></td>
+                    <td>${formatDate(entry.submittedAt)}</td>
+                    <td>
+                        <button onclick="deleteEntry('${entry.id}')" class="delete-btn" title="Delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function sortData(field) {
+            if (currentSort === field) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort = field;
+                sortDirection = field === 'submittedAt' ? 'desc' : 'asc';
+            }
+
+            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(field === 'rollNumber' ? 'sortRoll' : 'sortTime').classList.add('active');
+            renderTable();
+        }
+
+        async function deleteEntry(id) {
+            if (!confirm('Are you sure you want to delete this entry?')) return;
+
+            try {
+                const response = await fetch('delete.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: PIN, id: id })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    loadData();
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) {
+                alert('Failed to delete entry');
+            }
+        }
+
+        function exportCSV() {
+            if (allData.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            const headers = ['Name', 'Roll Number', 'House', 'Size', 'Submitted At'];
+            const rows = allData.map(e => [
+                `"${e.name}"`,
+                `"${e.rollNumber}"`,
+                `"${e.house}"`,
+                `"${e.size}"`,
+                `"${formatDate(e.submittedAt)}"`
+            ]);
+
+            const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tshirt-submissions-${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function refreshData() {
+            const btn = document.querySelector('.header-right .icon-btn:first-child i');
+            btn.classList.add('fa-spin');
+            loadData().then(() => {
+                setTimeout(() => btn.classList.remove('fa-spin'), 500);
+            });
+        }
+
+        function logout() {
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('pinScreen').classList.remove('hidden');
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinError').classList.add('hidden');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', renderTable);
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+        }
+    </script>
+</body>
+</html>
