@@ -159,15 +159,31 @@
         const PIN = '8023';
         let allData = [];
         let analytics = {};
-        let currentSort = 'submittedAt';
-        let sortDirection = 'desc';
+        let currentSort = sessionStorage.getItem('adminSort') || 'submittedAt';
+        let sortDirection = sessionStorage.getItem('adminSortDir') || 'desc';
+
+        // Restore sort button state
+        function restoreSortUI() {
+            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(currentSort === 'rollNumber' ? 'sortRoll' : 'sortTime').classList.add('active');
+        }
+
+        // Check if already logged in
+        if (sessionStorage.getItem('adminAuth') === 'true') {
+            document.getElementById('pinScreen').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            restoreSortUI();
+            loadData();
+        }
 
         document.getElementById('pinForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.getElementById('pinInput').value;
             if (input === PIN) {
+                sessionStorage.setItem('adminAuth', 'true');
                 document.getElementById('pinScreen').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.remove('hidden');
+                restoreSortUI();
                 loadData();
             } else {
                 document.getElementById('pinError').classList.remove('hidden');
@@ -273,6 +289,9 @@
                 sortDirection = field === 'submittedAt' ? 'desc' : 'asc';
             }
 
+            sessionStorage.setItem('adminSort', currentSort);
+            sessionStorage.setItem('adminSortDir', sortDirection);
+
             document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(field === 'rollNumber' ? 'sortRoll' : 'sortTime').classList.add('active');
             renderTable();
@@ -332,6 +351,9 @@
         }
 
         function logout() {
+            sessionStorage.removeItem('adminAuth');
+            sessionStorage.removeItem('adminSort');
+            sessionStorage.removeItem('adminSortDir');
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('pinScreen').classList.remove('hidden');
             document.getElementById('pinInput').value = '';
