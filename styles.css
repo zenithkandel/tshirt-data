@@ -600,6 +600,7 @@ input, textarea, select, .form-input, .form-select {
     position: sticky;
     top: 0;
     z-index: 100;
+    animation: slideDown 0.4s ease forwards;
 }
 
 .header-left {
@@ -617,6 +618,14 @@ input, textarea, select, .form-input, .form-select {
     justify-content: center;
     font-size: 14px;
     color: var(--text);
+    transition: transform var(--transition), background var(--transition);
+}
+
+.header-left:hover .logo-mark {
+    transform: rotate(-8deg) scale(1.05);
+    background: var(--accent);
+    color: var(--white);
+    border-color: var(--accent);
 }
 
 .header-left h1 {
@@ -646,8 +655,14 @@ input, textarea, select, .form-input, .form-select {
 }
 
 .header-btn:hover {
-    color: var(--text);
-    border-color: var(--border-light);
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(168, 85, 48, 0.05);
+    transform: translateY(-1px);
+}
+
+.header-btn:active {
+    transform: translateY(0);
 }
 
 .header-divider {
@@ -677,6 +692,7 @@ input, textarea, select, .form-input, .form-select {
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
+    animation: slideInLeft 0.4s ease forwards;
 }
 
 .section-header::before {
@@ -684,6 +700,11 @@ input, textarea, select, .form-input, .form-select {
     width: 16px;
     height: 1.5px;
     background: var(--accent);
+    transition: width var(--transition);
+}
+
+.section-header:hover::before {
+    width: 24px;
 }
 
 .section-header h3 {
@@ -711,6 +732,16 @@ input, textarea, select, .form-input, .form-select {
     display: flex;
     align-items: flex-start;
     gap: 16px;
+    transition: background var(--transition);
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+.stat-cell:nth-child(1) { animation-delay: 0.1s; }
+.stat-cell:nth-child(2) { animation-delay: 0.2s; }
+.stat-cell:nth-child(3) { animation-delay: 0.3s; }
+
+.stat-cell:hover {
+    background: var(--surface);
 }
 
 .stat-cell .stat-icon {
@@ -723,6 +754,14 @@ input, textarea, select, .form-input, .form-select {
     font-size: 14px;
     color: var(--accent);
     flex-shrink: 0;
+    transition: all var(--transition);
+}
+
+.stat-cell:hover .stat-icon {
+    background: var(--accent);
+    color: var(--white);
+    border-color: var(--accent);
+    transform: scale(1.08);
 }
 
 .stat-cell .stat-content {
@@ -736,6 +775,11 @@ input, textarea, select, .form-input, .form-select {
     font-weight: 500;
     line-height: 1.1;
     color: var(--text);
+    transition: color var(--transition);
+}
+
+.stat-cell:hover .stat-value {
+    color: var(--accent);
 }
 
 .stat-cell .stat-label {
@@ -760,7 +804,11 @@ input, textarea, select, .form-input, .form-select {
 .analytics-panel {
     background: var(--white);
     padding: 28px;
+    animation: fadeInUp 0.4s ease forwards;
 }
+
+.analytics-panel:nth-child(1) { animation-delay: 0.15s; }
+.analytics-panel:nth-child(2) { animation-delay: 0.25s; }
 
 .analytics-panel .panel-title {
     display: flex;
@@ -774,6 +822,11 @@ input, textarea, select, .form-input, .form-select {
 .analytics-panel .panel-title i {
     font-size: 0.8rem;
     color: var(--accent);
+    transition: transform var(--transition);
+}
+
+.analytics-panel:hover .panel-title i {
+    transform: scale(1.2);
 }
 
 .analytics-panel .panel-title span {
@@ -790,7 +843,15 @@ input, textarea, select, .form-input, .form-select {
     align-items: center;
     gap: 14px;
     margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeInUp 0.3s ease forwards;
 }
+
+.bar-item:nth-child(1) { animation-delay: 0.3s; }
+.bar-item:nth-child(2) { animation-delay: 0.35s; }
+.bar-item:nth-child(3) { animation-delay: 0.4s; }
+.bar-item:nth-child(4) { animation-delay: 0.45s; }
+.bar-item:nth-child(5) { animation-delay: 0.5s; }
 
 .bar-item:last-child {
     margin-bottom: 0;
@@ -804,6 +865,11 @@ input, textarea, select, .form-input, .form-select {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: color var(--transition);
+}
+
+.bar-item:hover .bar-name {
+    color: var(--accent);
 }
 
 .bar-item .bar-track {
@@ -811,12 +877,18 @@ input, textarea, select, .form-input, .form-select {
     height: 6px;
     background: var(--surface-alt);
     position: relative;
+    overflow: hidden;
 }
 
 .bar-item .bar-fill {
     height: 100%;
     background: var(--accent);
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: barGrow 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transition: background var(--transition);
+}
+
+.bar-item:hover .bar-fill {
+    background: var(--accent-dark);
 }
 
 .bar-item .bar-count {
@@ -826,6 +898,11 @@ input, textarea, select, .form-input, .form-select {
     font-size: 0.78rem;
     font-weight: 500;
     color: var(--text-secondary);
+    transition: color var(--transition);
+}
+
+.bar-item:hover .bar-count {
+    color: var(--accent);
 }
 
 /* ============================================
@@ -835,6 +912,7 @@ input, textarea, select, .form-input, .form-select {
 .table-section {
     border: 1px solid var(--border-light);
     background: var(--white);
+    animation: fadeInUp 0.4s ease 0.2s both;
 }
 
 .table-toolbar {
@@ -856,6 +934,11 @@ input, textarea, select, .form-input, .form-select {
 .table-toolbar .toolbar-title i {
     font-size: 0.8rem;
     color: var(--accent);
+    transition: transform var(--transition);
+}
+
+.table-toolbar:hover .toolbar-title i {
+    transform: rotate(90deg);
 }
 
 .table-toolbar .toolbar-title span {
@@ -884,6 +967,12 @@ input, textarea, select, .form-input, .form-select {
     font-size: 0.8rem;
     color: var(--text-muted);
     pointer-events: none;
+    transition: transform var(--transition);
+}
+
+.search-input:focus-within i {
+    transform: scale(1.15);
+    color: var(--accent);
 }
 
 .search-input input {
@@ -895,11 +984,13 @@ input, textarea, select, .form-input, .form-select {
     border: 1px solid var(--border-muted);
     outline: none;
     width: 220px;
-    transition: border-color var(--transition);
+    transition: all var(--transition);
 }
 
 .search-input input:focus {
     border-color: var(--accent);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(168, 85, 48, 0.08);
 }
 
 .search-input input::placeholder {
@@ -935,12 +1026,14 @@ input, textarea, select, .form-input, .form-select {
 
 .sort-btn:hover {
     color: var(--text);
+    background: var(--white);
 }
 
 .sort-btn.active {
     background: var(--text);
     color: var(--white);
     border-color: var(--text);
+    animation: pulseGlow 1.5s ease-in-out infinite;
 }
 
 /* Table */
@@ -976,12 +1069,27 @@ input, textarea, select, .form-input, .form-select {
     color: var(--text);
 }
 
+.data-table tbody tr {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.data-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.data-table tbody tr:nth-child(2) { animation-delay: 0.15s; }
+.data-table tbody tr:nth-child(3) { animation-delay: 0.2s; }
+.data-table tbody tr:nth-child(4) { animation-delay: 0.25s; }
+.data-table tbody tr:nth-child(5) { animation-delay: 0.3s; }
+.data-table tbody tr:nth-child(n+6) { animation-delay: 0.35s; }
+
 .data-table tbody tr:last-child td {
     border-bottom: none;
 }
 
 .data-table tbody tr:hover td {
     background: var(--surface);
+}
+
+.data-table tbody tr {
+    transition: background var(--transition);
 }
 
 /* Badges */
@@ -991,17 +1099,35 @@ input, textarea, select, .form-input, .form-select {
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.03em;
+    transition: transform var(--transition);
+}
+
+.badge:hover {
+    transform: scale(1.05);
 }
 
 .badge-house {
     border: 1px solid var(--border-light);
     color: var(--text-secondary);
+    transition: all var(--transition);
+}
+
+.badge-house:hover {
+    background: var(--accent);
+    color: var(--white);
+    border-color: var(--accent);
 }
 
 .badge-size {
     background: var(--accent);
     color: var(--white);
     border: 1px solid var(--accent);
+    transition: all var(--transition);
+}
+
+.badge-size:hover {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
 }
 
 .btn-delete {
