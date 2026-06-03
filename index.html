@@ -8,83 +8,62 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="form-page">
-    <div class="form-panel-left">
-        <div class="form-label-tag">
-            <span>School Event</span>
-        </div>
-        <h1 class="form-title">
-            T-Shirt<br>
-            <span class="accent-word">Size</span><span class="cursor"></span><br>
-            Collection.
-        </h1>
-        <p class="form-description">
-            Fill in your details below to submit your t-shirt size. 
-            Please ensure all information is accurate before submitting.
-        </p>
-        <div class="form-reminder">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <p>Once submitted, this form <strong>cannot be undone</strong>. Please check your details before submitting.</p>
-        </div>
-    </div>
-
-    <div class="form-panel-right">
-        <div class="form-card">
-            <div class="card-header">
-                <p class="label">Submission Form</p>
-                <h2>Your Details</h2>
+    <div class="form-wrapper">
+        <form id="tshirtForm">
+            <div class="form-group">
+                <label for="name"><i class="fa-sharp fa-thin fa-user"></i> Full Name</label>
+                <input type="text" id="name" class="form-input" placeholder="Enter your full name" required autocomplete="name">
             </div>
 
-            <form id="tshirtForm">
-                <div class="form-group">
-                    <label for="name"><i class="fa-solid fa-user"></i> Full Name</label>
-                    <input type="text" id="name" class="form-input" placeholder="Enter your full name" required autocomplete="name">
-                </div>
+            <div class="form-group">
+                <label for="rollNumber"><i class="fa-sharp fa-thin fa-hashtag"></i> Roll Number</label>
+                <input type="text" id="rollNumber" class="form-input" placeholder="Enter your roll number" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="rollNumber"><i class="fa-solid fa-hashtag"></i> Roll Number</label>
-                    <input type="text" id="rollNumber" class="form-input" placeholder="Enter your roll number" required>
-                </div>
+            <div class="form-group">
+                <label for="house"><i class="fa-sharp fa-thin fa-house"></i> House</label>
+                <select id="house" class="form-select" required>
+                    <option value="" disabled selected>Select your house</option>
+                    <option value="Gaurishankar">Gaurishankar</option>
+                    <option value="Byashrishi">Byashrishi</option>
+                    <option value="Ratnachuli">Ratnachuli</option>
+                    <option value="Choyu">Choyu</option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="house"><i class="fa-solid fa-house-chimney"></i> House</label>
-                    <select id="house" class="form-select" required>
-                        <option value="" disabled selected>Select your house</option>
-                        <option value="Gaurishankar">Gaurishankar</option>
-                        <option value="Byashrishi">Byashrishi</option>
-                        <option value="Ratnachuli">Ratnachuli</option>
-                        <option value="Choyu">Choyu</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="size"><i class="fa-sharp fa-thin fa-ruler"></i> T-Shirt Size</label>
+                <input type="text" id="size" class="form-input" placeholder="e.g. S, M, L, XL or 38, 40, 42" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="size"><i class="fa-solid fa-ruler"></i> T-Shirt Size</label>
-                    <input type="text" id="size" class="form-input" placeholder="e.g. S, M, L, XL or 38, 40, 42" required>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary" id="submitBtn">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        Submit
-                    </button>
-                </div>
-            </form>
-
-            <div id="successPanel" class="success-panel hidden">
-                <div class="success-icon">
-                    <i class="fa-solid fa-check"></i>
-                </div>
-                <h2>Submitted</h2>
-                <p>Your t-shirt size has been recorded successfully.</p>
-                <button onclick="resetForm()" class="btn-secondary">
-                    <i class="fa-solid fa-arrow-rotate-left"></i>
-                    Submit Another
+            <div class="form-actions">
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    <i class="fa-sharp fa-thin fa-paper-plane"></i>
+                    Submit
                 </button>
             </div>
+
+            <p class="form-note">
+                <i class="fa-sharp fa-thin fa-circle-info"></i>
+                Once submitted, this form cannot be undone.
+            </p>
+        </form>
+
+        <div id="successPanel" class="success-panel hidden">
+            <div class="success-icon">
+                <i class="fa-sharp fa-thin fa-check"></i>
+            </div>
+            <h2>Submitted</h2>
+            <p>Your t-shirt size has been recorded successfully.</p>
+            <button onclick="resetForm()" class="btn-secondary">
+                <i class="fa-sharp fa-thin fa-arrow-rotate-left"></i>
+                Submit Another
+            </button>
         </div>
     </div>
 
     <div id="errorToast" class="error-toast hidden">
-        <i class="fa-solid fa-circle-xmark"></i>
+        <i class="fa-sharp fa-thin fa-circle-xmark"></i>
         <span id="errorText"></span>
     </div>
 
@@ -107,7 +86,7 @@
             };
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.innerHTML = '<i class="fa-sharp fa-thin fa-spinner fa-spin"></i> Submitting...';
 
             try {
                 const response = await fetch('submit.php', {
@@ -128,7 +107,7 @@
                 showError('Network error. Please check your connection and try again.');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit';
+                submitBtn.innerHTML = '<i class="fa-sharp fa-thin fa-paper-plane"></i> Submit';
             }
         });
 
