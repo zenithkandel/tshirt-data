@@ -107,11 +107,55 @@ body {
     justify-content: center;
     min-height: 100vh;
     padding: 40px 24px;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(168, 85, 48, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(168, 85, 48, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(45, 37, 24, 0.02) 0%, transparent 50%),
+        var(--bg);
 }
 
 .form-wrapper {
     width: 100%;
     max-width: 420px;
+    background: var(--white);
+    border: 1px solid var(--border-muted);
+    padding: 48px 40px;
+    box-shadow:
+        0 1px 2px rgba(45, 37, 24, 0.04),
+        0 4px 12px rgba(45, 37, 24, 0.06),
+        0 16px 40px rgba(45, 37, 24, 0.08);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-muted);
+}
+
+.form-header .form-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 16px;
+    color: var(--accent);
+}
+
+.form-header h1 {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.form-header p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
 }
 
 .form-group {
@@ -187,9 +231,23 @@ body {
 }
 
 .form-actions {
-    margin-top: 36px;
+    margin-top: 32px;
     display: flex;
     gap: 12px;
+}
+
+.form-note {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.form-note i {
+    color: var(--accent);
+    font-size: 0.75rem;
 }
 
 .btn-primary {
@@ -244,7 +302,7 @@ body {
 /* Success State */
 .success-panel {
     text-align: center;
-    padding: 40px 20px;
+    padding: 32px 20px;
 }
 
 .success-icon {
@@ -857,27 +915,6 @@ body {
    ============================================ */
 
 @media (max-width: 900px) {
-    .form-page {
-        flex-direction: column;
-    }
-
-    .form-panel-left {
-        padding: 40px 32px 32px;
-    }
-
-    .form-panel-left::after {
-        top: auto;
-        bottom: 0;
-        left: 10%;
-        right: 10%;
-        height: 1px;
-        width: auto;
-    }
-
-    .form-panel-right {
-        padding: 32px;
-    }
-
     .stats-row {
         grid-template-columns: 1fr;
     }
@@ -918,16 +955,14 @@ body {
 }
 
 @media (max-width: 600px) {
-    .form-panel-left {
-        padding: 32px 24px 28px;
+    .form-page {
+        padding: 24px 16px;
+        align-items: flex-start;
+        padding-top: 60px;
     }
 
-    .form-title {
-        font-size: 2rem;
-    }
-
-    .form-panel-right {
-        padding: 28px 24px;
+    .form-wrapper {
+        padding: 36px 28px;
     }
 
     .form-actions {
@@ -974,14 +1009,6 @@ body {
 }
 
 @media (max-width: 400px) {
-    .form-title {
-        font-size: 1.7rem;
-    }
-
-    .form-description {
-        font-size: 0.88rem;
-    }
-
     .analytics-panel {
         padding: 20px;
     }
