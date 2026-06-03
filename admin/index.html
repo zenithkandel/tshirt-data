@@ -66,6 +66,13 @@
                     </div>
                 </div>
                 <div class="stat-cell">
+                    <div class="stat-icon"><i class="fa-sharp fa-thin fa-shirt"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="distributedCount">0</span>
+                        <span class="stat-label">Distributed</span>
+                    </div>
+                </div>
+                <div class="stat-cell">
                     <div class="stat-icon"><i class="fa-sharp fa-thin fa-house"></i></div>
                     <div class="stat-content">
                         <span class="stat-value" id="totalHouses">0</span>
@@ -145,6 +152,7 @@
                                 <th>Roll No.</th>
                                 <th>House</th>
                                 <th>Size</th>
+                                <th>Status</th>
                                 <th>Submitted</th>
                                 <th>Actions</th>
                             </tr>
@@ -271,6 +279,7 @@
 
         function renderDashboard() {
             document.getElementById('totalSubmissions').textContent = analytics.total || 0;
+            document.getElementById('distributedCount').textContent = analytics.distributed || 0;
             document.getElementById('totalHouses').textContent = Object.keys(analytics.byHouse || {}).length;
             document.getElementById('totalSizes').textContent = Object.keys(analytics.bySize || {}).length;
 
@@ -327,12 +336,19 @@
 
             emptyState.classList.add('hidden');
             tbody.innerHTML = filtered.map((entry, index) => `
-                <tr>
+                <tr class="${entry.distributed ? 'row-distributed' : ''}">
                     <td class="mono">${index + 1}</td>
                     <td>${escapeHtml(entry.name)}</td>
                     <td class="mono">${escapeHtml(entry.rollNumber)}</td>
                     <td><span class="badge badge-house">${entry.house}</span></td>
                     <td><span class="badge badge-size">${escapeHtml(entry.size)}</span></td>
+                    <td>
+                        <label class="dist-check" title="${entry.distributed ? 'Distributed' : 'Pending'}">
+                            <input type="checkbox" ${entry.distributed ? 'checked' : ''} onchange="toggleDistribute('${entry.id}')">
+                            <span class="dist-checkmark"></span>
+                            <span class="dist-label">${entry.distributed ? 'Distributed' : 'Pending'}</span>
+                        </label>
+                    </td>
                     <td class="mono">${formatDate(entry.submittedAt)}</td>
                     <td>
                         <div class="action-btns">
@@ -390,12 +406,13 @@
                 return;
             }
 
-            const headers = ['Name', 'Roll Number', 'House', 'Size', 'Submitted At'];
+            const headers = ['Name', 'Roll Number', 'House', 'Size', 'Distributed', 'Submitted At'];
             const rows = allData.map(e => [
                 `"${e.name}"`,
                 `"${e.rollNumber}"`,
                 `"${e.house}"`,
                 `"${e.size}"`,
+                `"${e.distributed ? 'Yes' : 'No'}"`,
                 `"${formatDate(e.submittedAt)}"`
             ]);
 
@@ -489,6 +506,24 @@
                 }
             } catch (err) {
                 alert('Failed to update entry');
+            }
+        }
+
+        async function toggleDistribute(id) {
+            try {
+                const response = await fetch('../toggle-distribute.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: PIN, id: id })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    loadData();
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) {
+                alert('Failed to update distribution status');
             }
         }
     </script>

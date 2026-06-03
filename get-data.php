@@ -22,12 +22,16 @@ $data = json_decode($content, true) ?? [];
 
 $houseCounts = [];
 $sizeCounts = [];
+$distributedCount = 0;
 
 foreach ($data as $entry) {
     $h = $entry['house'];
     $s = $entry['size'];
     $houseCounts[$h] = ($houseCounts[$h] ?? 0) + 1;
     $sizeCounts[$s] = ($sizeCounts[$s] ?? 0) + 1;
+    if (!empty($entry['distributed'])) {
+        $distributedCount++;
+    }
 }
 
 arsort($houseCounts);
@@ -38,6 +42,7 @@ echo json_encode([
     'data' => $data,
     'analytics' => [
         'total' => count($data),
+        'distributed' => $distributedCount,
         'byHouse' => $houseCounts,
         'bySize' => $sizeCounts
     ]

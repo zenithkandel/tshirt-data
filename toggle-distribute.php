@@ -14,10 +14,6 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 $pin = $input['pin'] ?? '';
 $id = $input['id'] ?? '';
-$name = trim($input['name'] ?? '');
-$rollNumber = trim($input['rollNumber'] ?? '');
-$house = trim($input['house'] ?? '');
-$size = trim($input['size'] ?? '');
 
 if ($pin !== '8023') {
     http_response_code(403);
@@ -25,9 +21,9 @@ if ($pin !== '8023') {
     exit;
 }
 
-if (empty($id) || empty($name) || empty($rollNumber) || empty($house) || empty($size)) {
+if (empty($id)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'All fields are required']);
+    echo json_encode(['success' => false, 'message' => 'ID required']);
     exit;
 }
 
@@ -45,20 +41,7 @@ $data = json_decode($content, true) ?? [];
 $found = false;
 foreach ($data as &$entry) {
     if ($entry['id'] === $id) {
-        foreach ($data as $check) {
-            if ($check['id'] !== $id && strtolower($check['rollNumber']) === strtolower($rollNumber)) {
-                http_response_code(409);
-                echo json_encode(['success' => false, 'message' => 'This roll number is already used by another entry']);
-                exit;
-            }
-        }
-        $entry['name'] = $name;
-        $entry['rollNumber'] = $rollNumber;
-        $entry['house'] = $house;
-        $entry['size'] = $size;
-        if (!isset($entry['distributed'])) {
-            $entry['distributed'] = false;
-        }
+        $entry['distributed'] = !($entry['distributed'] ?? false);
         $found = true;
         break;
     }
@@ -77,4 +60,4 @@ if (file_put_contents($dataFile, json_encode($data, JSON_PRETTY_PRINT)) === fals
     exit;
 }
 
-echo json_encode(['success' => true, 'message' => 'Entry updated successfully']);
+echo json_encode(['success' => true, 'message' => 'Distribution status toggled']);

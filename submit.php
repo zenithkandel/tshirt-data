@@ -51,6 +51,7 @@ $newEntry = [
     'rollNumber' => $rollNumber,
     'house' => $house,
     'size' => $size,
+    'distributed' => false,
     'submittedAt' => date('c')
 ];
 
