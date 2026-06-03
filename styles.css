@@ -433,6 +433,18 @@ input, textarea, select, .form-input, .form-select {
     transform: scale(0.97);
 }
 
+/* Size chips - 5 column grid */
+.chip-size {
+    justify-content: center;
+    padding: 12px 8px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+#sizeGroup {
+    grid-template-columns: repeat(5, 1fr);
+}
+
 .form-actions {
     margin-top: 32px;
     opacity: 0;
