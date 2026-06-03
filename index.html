@@ -119,22 +119,13 @@
             });
         });
 
-        // Auto-flip tshirt every 8 seconds
-        let autoFlip = setInterval(() => {
-            flipCard.classList.toggle('flipped');
-        }, 8000);
-
         // Flip on hover
         flipCard.addEventListener('mouseenter', () => {
-            clearInterval(autoFlip);
             flipCard.classList.add('flipped');
         });
 
         flipCard.addEventListener('mouseleave', () => {
             flipCard.classList.remove('flipped');
-            autoFlip = setInterval(() => {
-                flipCard.classList.toggle('flipped');
-            }, 8000);
         });
 
         form.addEventListener('submit', async (e) => {

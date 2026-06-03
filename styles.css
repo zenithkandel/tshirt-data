@@ -1268,8 +1268,6 @@ input, textarea, select, .form-input, .form-select {
 .btn-delete:active {
     transform: scale(0.95);
 }
-    background: var(--error-bg);
-}
 
 .empty-state {
     text-align: center;
@@ -1335,17 +1333,45 @@ input, textarea, select, .form-input, .form-select {
         flex: 1;
         justify-content: center;
     }
+
+    .form-split {
+        flex-direction: column;
+    }
+
+    .form-visual {
+        border-right: none;
+        border-bottom: 1px solid var(--border-muted);
+        padding: 32px;
+    }
+
+    .tshirt-flip-card {
+        width: 180px;
+        height: 230px;
+    }
+
+    .form-content {
+        padding: 28px;
+    }
 }
 
 @media (max-width: 600px) {
     .form-page {
-        padding: 24px 16px;
+        padding: 20px 12px;
         align-items: flex-start;
-        padding-top: 60px;
+        padding-top: 40px;
     }
 
-    .form-wrapper {
-        padding: 36px 28px;
+    .form-visual {
+        padding: 24px;
+    }
+
+    .tshirt-flip-card {
+        width: 160px;
+        height: 200px;
+    }
+
+    .form-content {
+        padding: 24px 20px;
     }
 
     .form-actions {
@@ -1394,6 +1420,11 @@ input, textarea, select, .form-input, .form-select {
 @media (max-width: 400px) {
     .analytics-panel {
         padding: 20px;
+    }
+
+    .tshirt-flip-card {
+        width: 140px;
+        height: 180px;
     }
 }
 
