@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel — T-Shirt Collection</title>
     <script src="https://zenithkandel.com.np/fontawesome/zenith-icons.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 
@@ -182,7 +182,7 @@
 
         async function loadData() {
             try {
-                const response = await fetch(`get-data.php?pin=${PIN}`);
+                const response = await fetch(`../get-data.php?pin=${PIN}`);
                 const result = await response.json();
                 if (result.success) {
                     allData = result.data;
@@ -282,7 +282,7 @@
             if (!confirm('Are you sure you want to delete this entry?')) return;
 
             try {
-                const response = await fetch('delete.php', {
+                const response = await fetch('../delete.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ pin: PIN, id: id })
