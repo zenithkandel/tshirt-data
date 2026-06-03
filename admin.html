@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - T-Shirt Collection</title>
+    <title>Admin Panel — T-Shirt Collection</title>
     <script src="https://zenithkandel.com.np/fontawesome/zenith-icons.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="admin-page">
+<body>
 
     <!-- PIN Screen -->
     <div id="pinScreen" class="pin-screen">
@@ -19,9 +19,9 @@
             <p>Enter your PIN to continue</p>
             <form id="pinForm" class="pin-form">
                 <input type="password" id="pinInput" maxlength="4" placeholder="_ _ _ _" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required>
-                <button type="submit" class="submit-btn">
+                <button type="submit" class="btn-primary">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                    <span>Enter</span>
+                    Enter
                 </button>
             </form>
             <p id="pinError" class="pin-error hidden">Invalid PIN. Try again.</p>
@@ -32,70 +32,92 @@
     <div id="adminDashboard" class="admin-dashboard hidden">
         <header class="admin-header">
             <div class="header-left">
-                <i class="fa-solid fa-shirt"></i>
+                <div class="logo-mark">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
                 <h1>Admin Panel</h1>
             </div>
             <div class="header-right">
-                <button onclick="refreshData()" class="icon-btn" title="Refresh">
+                <button onclick="refreshData()" class="header-btn" title="Refresh data">
                     <i class="fa-solid fa-arrows-rotate"></i>
                 </button>
-                <button onclick="exportCSV()" class="icon-btn" title="Export CSV">
+                <button onclick="exportCSV()" class="header-btn" title="Export as CSV">
                     <i class="fa-solid fa-download"></i>
                 </button>
-                <button onclick="logout()" class="icon-btn" title="Logout">
+                <div class="header-divider"></div>
+                <button onclick="logout()" class="header-btn logout" title="Logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
         </header>
 
         <div class="dashboard-content">
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
+
+            <!-- Stats -->
+            <div class="section-header">
+                <h3>Overview</h3>
+            </div>
+            <div class="stats-row">
+                <div class="stat-cell">
                     <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-number" id="totalSubmissions">0</span>
+                    <div class="stat-content">
+                        <span class="stat-value" id="totalSubmissions">0</span>
                         <span class="stat-label">Total Submissions</span>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-cell">
                     <div class="stat-icon"><i class="fa-solid fa-house-chimney"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-number" id="totalHouses">0</span>
+                    <div class="stat-content">
+                        <span class="stat-value" id="totalHouses">0</span>
                         <span class="stat-label">Houses</span>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-cell">
                     <div class="stat-icon"><i class="fa-solid fa-ruler"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-number" id="totalSizes">0</span>
+                    <div class="stat-content">
+                        <span class="stat-value" id="totalSizes">0</span>
                         <span class="stat-label">Unique Sizes</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Analytics Section -->
+            <!-- Analytics -->
+            <div class="section-header">
+                <h3>Analytics</h3>
+            </div>
             <div class="analytics-grid">
-                <div class="analytics-card">
-                    <h3><i class="fa-solid fa-house-chimney"></i> By House</h3>
-                    <div id="houseAnalytics" class="analytics-bars"></div>
+                <div class="analytics-panel">
+                    <div class="panel-title">
+                        <i class="fa-solid fa-house-chimney"></i>
+                        <span>By House</span>
+                    </div>
+                    <div id="houseAnalytics"></div>
                 </div>
-                <div class="analytics-card">
-                    <h3><i class="fa-solid fa-ruler"></i> By Size</h3>
-                    <div id="sizeAnalytics" class="analytics-bars"></div>
+                <div class="analytics-panel">
+                    <div class="panel-title">
+                        <i class="fa-solid fa-ruler"></i>
+                        <span>By Size</span>
+                    </div>
+                    <div id="sizeAnalytics"></div>
                 </div>
             </div>
 
-            <!-- Submissions Table -->
+            <!-- Table -->
+            <div class="section-header">
+                <h3>Submissions</h3>
+            </div>
             <div class="table-section">
-                <div class="table-header">
-                    <h3><i class="fa-solid fa-list"></i> Submissions</h3>
-                    <div class="table-controls">
-                        <div class="search-box">
+                <div class="table-toolbar">
+                    <div class="toolbar-title">
+                        <i class="fa-solid fa-list"></i>
+                        <span>All Entries</span>
+                    </div>
+                    <div class="toolbar-actions">
+                        <div class="search-input">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <input type="text" id="searchInput" placeholder="Search name or roll...">
                         </div>
-                        <div class="sort-buttons">
+                        <div class="sort-group">
                             <button onclick="sortData('rollNumber')" class="sort-btn" id="sortRoll">
                                 <i class="fa-solid fa-arrow-down-1-9"></i>
                                 Roll No.
@@ -107,8 +129,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="table-wrapper">
-                    <table id="submissionsTable">
+                <div class="table-wrap">
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -117,14 +139,15 @@
                                 <th>House</th>
                                 <th>Size</th>
                                 <th>Submitted</th>
-                                <th>Actions</th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
-                        </tbody>
+                        <tbody id="tableBody"></tbody>
                     </table>
                     <div id="emptyState" class="empty-state hidden">
-                        <i class="fa-solid fa-inbox"></i>
+                        <div class="empty-icon">
+                            <i class="fa-solid fa-inbox"></i>
+                        </div>
                         <p>No submissions yet</p>
                     </div>
                 </div>
@@ -139,7 +162,7 @@
         let currentSort = 'submittedAt';
         let sortDirection = 'desc';
 
-        // PIN Form
+        // PIN
         document.getElementById('pinForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.getElementById('pinInput').value;
@@ -154,7 +177,6 @@
             }
         });
 
-        // Only allow numeric input in PIN field
         document.getElementById('pinInput').addEventListener('input', (e) => {
             e.target.value = e.target.value.replace(/[^0-9]/g, '');
         });
@@ -174,28 +196,23 @@
         }
 
         function renderDashboard() {
-            // Stats
             document.getElementById('totalSubmissions').textContent = analytics.total || 0;
             document.getElementById('totalHouses').textContent = Object.keys(analytics.byHouse || {}).length;
             document.getElementById('totalSizes').textContent = Object.keys(analytics.bySize || {}).length;
 
-            // House bars
-            renderBars('houseAnalytics', analytics.byHouse || {}, '#d4830a');
-            // Size bars
-            renderBars('sizeAnalytics', analytics.bySize || {}, '#c96b2a');
-
-            // Table
+            renderBars('houseAnalytics', analytics.byHouse || {});
+            renderBars('sizeAnalytics', analytics.bySize || {});
             renderTable();
         }
 
-        function renderBars(containerId, data, color) {
+        function renderBars(containerId, data) {
             const container = document.getElementById(containerId);
             const max = Math.max(...Object.values(data), 1);
             container.innerHTML = Object.entries(data).map(([key, count]) => `
-                <div class="bar-row">
-                    <span class="bar-label">${key}</span>
+                <div class="bar-item">
+                    <span class="bar-name">${escapeHtml(key)}</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="width: ${(count / max) * 100}%; background: ${color}"></div>
+                        <div class="bar-fill" style="width: ${(count / max) * 100}%"></div>
                     </div>
                     <span class="bar-count">${count}</span>
                 </div>
@@ -234,14 +251,14 @@
             emptyState.classList.add('hidden');
             tbody.innerHTML = filtered.map((entry, index) => `
                 <tr>
-                    <td>${index + 1}</td>
+                    <td class="mono">${index + 1}</td>
                     <td>${escapeHtml(entry.name)}</td>
-                    <td>${escapeHtml(entry.rollNumber)}</td>
-                    <td><span class="house-badge house-${entry.house.toLowerCase()}">${entry.house}</span></td>
-                    <td><span class="size-badge">${escapeHtml(entry.size)}</span></td>
-                    <td>${formatDate(entry.submittedAt)}</td>
+                    <td class="mono">${escapeHtml(entry.rollNumber)}</td>
+                    <td><span class="badge badge-house">${entry.house}</span></td>
+                    <td><span class="badge badge-size">${escapeHtml(entry.size)}</span></td>
+                    <td class="mono">${formatDate(entry.submittedAt)}</td>
                     <td>
-                        <button onclick="deleteEntry('${entry.id}')" class="delete-btn" title="Delete">
+                        <button onclick="deleteEntry('${entry.id}')" class="btn-delete" title="Delete entry">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -308,7 +325,7 @@
         }
 
         function refreshData() {
-            const btn = document.querySelector('.header-right .icon-btn:first-child i');
+            const btn = document.querySelector('.header-btn:first-child i');
             btn.classList.add('fa-spin');
             loadData().then(() => {
                 setTimeout(() => btn.classList.remove('fa-spin'), 500);
