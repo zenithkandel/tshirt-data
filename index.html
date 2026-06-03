@@ -64,10 +64,31 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="size"><i class="fa-sharp fa-thin fa-ruler"></i> T-Shirt Size</label>
-                        <input type="text" id="size" class="form-input" placeholder="Enter size" required>
-                    </div>
+            <div class="form-group">
+                <label><i class="fa-sharp fa-thin fa-ruler"></i> T-Shirt Size</label>
+                <div class="chip-group" id="sizeGroup">
+                    <label class="chip chip-size" style="--chip-color: var(--accent)">
+                        <input type="radio" name="size" value="S" required>
+                        <span>S</span>
+                    </label>
+                    <label class="chip chip-size" style="--chip-color: var(--accent)">
+                        <input type="radio" name="size" value="M">
+                        <span>M</span>
+                    </label>
+                    <label class="chip chip-size" style="--chip-color: var(--accent)">
+                        <input type="radio" name="size" value="L">
+                        <span>L</span>
+                    </label>
+                    <label class="chip chip-size" style="--chip-color: var(--accent)">
+                        <input type="radio" name="size" value="XL">
+                        <span>XL</span>
+                    </label>
+                    <label class="chip chip-size" style="--chip-color: var(--accent)">
+                        <input type="radio" name="size" value="XXL">
+                        <span>XXL</span>
+                    </label>
+                </div>
+            </div>
 
                     <div class="form-actions">
                         <button type="submit" class="btn-primary" id="submitBtn">
@@ -113,7 +134,8 @@
         // Chip selection
         document.querySelectorAll('.chip').forEach(chip => {
             chip.addEventListener('click', () => {
-                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                const group = chip.closest('.chip-group');
+                group.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
                 chip.classList.add('active');
                 chip.querySelector('input').checked = true;
             });
@@ -136,7 +158,7 @@
                 name: document.getElementById('name').value.trim(),
                 rollNumber: document.getElementById('rollNumber').value.trim(),
                 house: document.querySelector('input[name="house"]:checked')?.value || '',
-                size: document.getElementById('size').value.trim()
+                size: document.querySelector('input[name="size"]:checked')?.value || ''
             };
 
             submitBtn.disabled = true;
