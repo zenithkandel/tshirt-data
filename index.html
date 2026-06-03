@@ -9,64 +9,91 @@
 </head>
 <body class="form-page">
     <div class="form-wrapper">
-        <div class="form-header">
-            <div class="form-icon">
-                <i class="fa-sharp fa-thin fa-shirt"></i>
-            </div>
-            <h1>T-Shirt Size</h1>
-            <p>Fill in your details below</p>
-        </div>
-
-        <form id="tshirtForm">
-            <div class="form-group">
-                <label for="name"><i class="fa-sharp fa-thin fa-user"></i> Name</label>
-                <input type="text" id="name" class="form-input" placeholder="Enter your name" required autocomplete="name">
-            </div>
-
-            <div class="form-group">
-                <label for="rollNumber"><i class="fa-sharp fa-thin fa-hashtag"></i> Roll Number</label>
-                <input type="text" id="rollNumber" class="form-input" placeholder="Enter your roll number" required>
+        <div class="form-split">
+            <div class="form-visual">
+                <div class="tshirt-flip-card" id="flipCard">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img src="images/tshirt-front.png" alt="T-Shirt Front">
+                            <span class="flip-label">Front</span>
+                        </div>
+                        <div class="flip-back">
+                            <img src="images/tshirt-back.png" alt="T-Shirt Back">
+                            <span class="flip-label">Back</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="house"><i class="fa-sharp fa-thin fa-house"></i> House</label>
-                <select id="house" class="form-select" required>
-                    <option value="" disabled selected>Select your house</option>
-                    <option value="Gaurishankar">Gaurishankar</option>
-                    <option value="Byashrishi">Byashrishi</option>
-                    <option value="Ratnachuli">Ratnachuli</option>
-                    <option value="Choyu">Choyu</option>
-                </select>
-            </div>
+            <div class="form-content">
+                <div class="form-header">
+                    <h1>T-Shirt Size</h1>
+                    <p>Fill in your details below</p>
+                </div>
 
-            <div class="form-group">
-                <label for="size"><i class="fa-sharp fa-thin fa-ruler"></i> T-Shirt Size</label>
-                <input type="text" id="size" class="form-input" placeholder="Enter size" required>
-            </div>
+                <form id="tshirtForm">
+                    <div class="form-group">
+                        <label for="name"><i class="fa-sharp fa-thin fa-user"></i> Name</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name" required autocomplete="name">
+                    </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn-primary" id="submitBtn">
-                    <i class="fa-sharp fa-thin fa-paper-plane"></i>
-                    Submit
-                </button>
-            </div>
+                    <div class="form-group">
+                        <label for="rollNumber"><i class="fa-sharp fa-thin fa-hashtag"></i> Roll Number</label>
+                        <input type="text" id="rollNumber" class="form-input" placeholder="Enter your roll number" required>
+                    </div>
 
-            <p class="form-note">
-                <i class="fa-sharp fa-thin fa-circle-info"></i>
-                Once submitted, this form cannot be undone.
-            </p>
-        </form>
+                    <div class="form-group">
+                        <label><i class="fa-sharp fa-thin fa-house"></i> House</label>
+                        <div class="chip-group" id="houseGroup">
+                            <label class="chip" data-value="Gaurishankar" style="--chip-color: #6b6b6b">
+                                <input type="radio" name="house" value="Gaurishankar" required>
+                                <span>Gaurishankar</span>
+                            </label>
+                            <label class="chip" data-value="Byashrishi" style="--chip-color: #8b5e3c">
+                                <input type="radio" name="house" value="Byashrishi">
+                                <span>Byashrishi</span>
+                            </label>
+                            <label class="chip" data-value="Ratnachuli" style="--chip-color: #2d5a3d">
+                                <input type="radio" name="house" value="Ratnachuli">
+                                <span>Ratnachuli</span>
+                            </label>
+                            <label class="chip" data-value="Choyu" style="--chip-color: #1a1a1a">
+                                <input type="radio" name="house" value="Choyu">
+                                <span>Choyu</span>
+                            </label>
+                        </div>
+                    </div>
 
-        <div id="successPanel" class="success-panel hidden">
-            <div class="success-icon">
-                <i class="fa-sharp fa-thin fa-check"></i>
+                    <div class="form-group">
+                        <label for="size"><i class="fa-sharp fa-thin fa-ruler"></i> T-Shirt Size</label>
+                        <input type="text" id="size" class="form-input" placeholder="Enter size" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fa-sharp fa-thin fa-paper-plane"></i>
+                            Submit
+                        </button>
+                    </div>
+
+                    <p class="form-note">
+                        <i class="fa-sharp fa-thin fa-circle-info"></i>
+                        Once submitted, this form cannot be undone.
+                    </p>
+                </form>
+
+                <div id="successPanel" class="success-panel hidden">
+                    <div class="success-icon">
+                        <i class="fa-sharp fa-thin fa-check"></i>
+                    </div>
+                    <h2>Submitted</h2>
+                    <p>Your t-shirt size has been recorded successfully.</p>
+                    <button onclick="resetForm()" class="btn-secondary">
+                        <i class="fa-sharp fa-thin fa-arrow-rotate-left"></i>
+                        Submit Another
+                    </button>
+                </div>
             </div>
-            <h2>Submitted</h2>
-            <p>Your t-shirt size has been recorded successfully.</p>
-            <button onclick="resetForm()" class="btn-secondary">
-                <i class="fa-sharp fa-thin fa-arrow-rotate-left"></i>
-                Submit Another
-            </button>
         </div>
     </div>
 
@@ -81,6 +108,34 @@
         const successPanel = document.getElementById('successPanel');
         const errorToast = document.getElementById('errorToast');
         const errorText = document.getElementById('errorText');
+        const flipCard = document.getElementById('flipCard');
+
+        // Chip selection
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                chip.querySelector('input').checked = true;
+            });
+        });
+
+        // Auto-flip tshirt every 8 seconds
+        let autoFlip = setInterval(() => {
+            flipCard.classList.toggle('flipped');
+        }, 8000);
+
+        // Flip on hover
+        flipCard.addEventListener('mouseenter', () => {
+            clearInterval(autoFlip);
+            flipCard.classList.add('flipped');
+        });
+
+        flipCard.addEventListener('mouseleave', () => {
+            flipCard.classList.remove('flipped');
+            autoFlip = setInterval(() => {
+                flipCard.classList.toggle('flipped');
+            }, 8000);
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -89,7 +144,7 @@
             const formData = {
                 name: document.getElementById('name').value.trim(),
                 rollNumber: document.getElementById('rollNumber').value.trim(),
-                house: document.getElementById('house').value,
+                house: document.querySelector('input[name="house"]:checked')?.value || '',
                 size: document.getElementById('size').value.trim()
             };
 
@@ -131,6 +186,7 @@
 
         function resetForm() {
             form.reset();
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             form.classList.remove('hidden');
             successPanel.classList.add('hidden');
             hideError();
