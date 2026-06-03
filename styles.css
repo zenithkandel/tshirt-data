@@ -433,16 +433,45 @@ input, textarea, select, .form-input, .form-select {
     transform: scale(0.97);
 }
 
-/* Size chips - 5 column grid */
-.chip-size {
-    justify-content: center;
-    padding: 12px 8px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-}
-
+/* Size chips - compact pill buttons */
 #sizeGroup {
     grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.chip-size {
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border-muted);
+    border-left: 1px solid var(--border-muted);
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--text-muted);
+    transition: all var(--transition);
+}
+
+.chip-size:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-secondary);
+    background: var(--surface);
+}
+
+.chip-size.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--white);
+}
+
+.chip-size.active:hover {
+    background: #96482a;
+    border-color: #96482a;
 }
 
 .form-actions {
