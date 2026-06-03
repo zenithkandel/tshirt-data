@@ -1312,6 +1312,174 @@ input, textarea, select, .form-input, .form-select {
     transform: scale(0.95);
 }
 
+/* Edit Button */
+.btn-edit {
+    width: 30px;
+    height: 30px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: all var(--transition);
+}
+
+.btn-edit:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(168, 85, 48, 0.08);
+    transform: scale(1.1);
+}
+
+.btn-edit:active {
+    transform: scale(0.95);
+}
+
+.action-btns {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+/* Filter Select */
+.filter-select {
+    padding: 8px 30px 8px 12px;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border-muted);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%238a7e70' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: all var(--transition);
+}
+
+.filter-select:hover {
+    color: var(--text);
+    background-color: var(--white);
+}
+
+.filter-select:focus {
+    border-color: var(--accent);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(168, 85, 48, 0.08);
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 21, 16, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+    animation: fadeIn 0.2s ease forwards;
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    box-shadow:
+        0 4px 12px rgba(45, 37, 24, 0.08),
+        0 16px 40px rgba(45, 37, 24, 0.12);
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border-muted);
+}
+
+.modal-header h3 {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all var(--transition);
+}
+
+.modal-close:hover {
+    color: var(--error);
+    border-color: var(--error);
+    background: var(--error-bg);
+}
+
+.modal-body {
+    padding: 24px 28px;
+}
+
+.form-group-modal {
+    margin-bottom: 20px;
+}
+
+.form-group-modal:last-child {
+    margin-bottom: 0;
+}
+
+.form-group-modal label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    transition: color var(--transition);
+}
+
+.form-group-modal:hover label {
+    color: var(--accent);
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 28px;
+    border-top: 1px solid var(--border-muted);
+    background: var(--surface);
+}
+
+.modal-footer .btn-primary,
+.modal-footer .btn-secondary {
+    padding: 10px 20px;
+    font-size: 0.72rem;
+}
+
 .empty-state {
     text-align: center;
     padding: 56px 24px;
@@ -1362,6 +1530,10 @@ input, textarea, select, .form-input, .form-select {
 
     .toolbar-actions {
         flex-direction: column;
+    }
+
+    .filter-select {
+        width: 100%;
     }
 
     .search-input input {
@@ -1476,7 +1648,9 @@ input, textarea, select, .form-input, .form-select {
     .admin-header,
     .toolbar-actions,
     .btn-delete,
-    .empty-state {
+    .btn-edit,
+    .empty-state,
+    .modal-overlay {
         display: none;
     }
 

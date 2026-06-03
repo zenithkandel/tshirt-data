@@ -117,6 +117,13 @@
                             <i class="fa-sharp fa-thin fa-magnifying-glass"></i>
                             <input type="text" id="searchInput" placeholder="Search name or roll...">
                         </div>
+                        <select id="houseFilter" class="filter-select" onchange="renderTable()">
+                            <option value="">All Houses</option>
+                            <option value="Gaurishankar">Gaurishankar</option>
+                            <option value="Byashrishi">Byashrishi</option>
+                            <option value="Ratnachuli">Ratnachuli</option>
+                            <option value="Choyu">Choyu</option>
+                        </select>
                         <div class="sort-group">
                             <button onclick="sortData('rollNumber')" class="sort-btn" id="sortRoll">
                                 <i class="fa-sharp fa-thin fa-arrow-down-1-9"></i>
@@ -139,7 +146,7 @@
                                 <th>House</th>
                                 <th>Size</th>
                                 <th>Submitted</th>
-                                <th></th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -155,12 +162,64 @@
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal-overlay hidden" onclick="if(event.target===this)closeEditModal()">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Edit Entry</h3>
+                <button onclick="closeEditModal()" class="modal-close">
+                    <i class="fa-sharp fa-thin fa-xmark"></i>
+                </button>
+            </div>
+            <form id="editForm" onsubmit="saveEdit(event)">
+                <div class="modal-body">
+                    <input type="hidden" id="editId">
+                    <div class="form-group-modal">
+                        <label for="editName">Name</label>
+                        <input type="text" id="editName" class="form-input" required>
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="editRollNumber">Roll Number</label>
+                        <input type="text" id="editRollNumber" class="form-input" required>
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="editHouse">House</label>
+                        <select id="editHouse" class="form-select" required>
+                            <option value="Gaurishankar">Gaurishankar</option>
+                            <option value="Byashrishi">Byashrishi</option>
+                            <option value="Ratnachuli">Ratnachuli</option>
+                            <option value="Choyu">Choyu</option>
+                        </select>
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="editSize">Size</label>
+                        <select id="editSize" class="form-select" required>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeEditModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-sharp fa-thin fa-check"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         const PIN = '8023';
         let allData = [];
         let analytics = {};
         let currentSort = sessionStorage.getItem('adminSort') || 'submittedAt';
         let sortDirection = sessionStorage.getItem('adminSortDir') || 'desc';
+        let currentHouseFilter = '';
 
         // Restore sort button state
         function restoreSortUI() {
@@ -238,11 +297,14 @@
             const tbody = document.getElementById('tableBody');
             const emptyState = document.getElementById('emptyState');
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            currentHouseFilter = document.getElementById('houseFilter').value;
 
-            let filtered = allData.filter(entry =>
-                entry.name.toLowerCase().includes(searchTerm) ||
-                entry.rollNumber.toLowerCase().includes(searchTerm)
-            );
+            let filtered = allData.filter(entry => {
+                const matchesSearch = entry.name.toLowerCase().includes(searchTerm) ||
+                    entry.rollNumber.toLowerCase().includes(searchTerm);
+                const matchesHouse = !currentHouseFilter || entry.house === currentHouseFilter;
+                return matchesSearch && matchesHouse;
+            });
 
             filtered.sort((a, b) => {
                 let valA, valB;
@@ -273,9 +335,14 @@
                     <td><span class="badge badge-size">${escapeHtml(entry.size)}</span></td>
                     <td class="mono">${formatDate(entry.submittedAt)}</td>
                     <td>
-                        <button onclick="deleteEntry('${entry.id}')" class="btn-delete" title="Delete entry">
-                            <i class="fa-sharp fa-thin fa-trash"></i>
-                        </button>
+                        <div class="action-btns">
+                            <button onclick="openEditModal('${entry.id}')" class="btn-edit" title="Edit entry">
+                                <i class="fa-sharp fa-thin fa-pen"></i>
+                            </button>
+                            <button onclick="deleteEntry('${entry.id}')" class="btn-delete" title="Delete entry">
+                                <i class="fa-sharp fa-thin fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             `).join('');
@@ -373,6 +440,56 @@
             return date.toLocaleDateString('en-US', {
                 month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
             });
+        }
+
+        function openEditModal(id) {
+            const entry = allData.find(e => e.id === id);
+            if (!entry) return;
+
+            document.getElementById('editId').value = entry.id;
+            document.getElementById('editName').value = entry.name;
+            document.getElementById('editRollNumber').value = entry.rollNumber;
+            document.getElementById('editHouse').value = entry.house;
+            document.getElementById('editSize').value = entry.size;
+            document.getElementById('editModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        async function saveEdit(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('editId').value;
+            const name = document.getElementById('editName').value.trim();
+            const rollNumber = document.getElementById('editRollNumber').value.trim();
+            const house = document.getElementById('editHouse').value;
+            const size = document.getElementById('editSize').value;
+
+            if (!name || !rollNumber || !house || !size) {
+                alert('All fields are required');
+                return;
+            }
+
+            try {
+                const response = await fetch('../edit.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: PIN, id, name, rollNumber, house, size })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    closeEditModal();
+                    loadData();
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) {
+                alert('Failed to update entry');
+            }
         }
     </script>
 </body>
