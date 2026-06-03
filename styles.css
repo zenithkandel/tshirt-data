@@ -429,16 +429,6 @@ input, textarea, select, .form-input, .form-select {
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--chip-color) 10%, transparent);
 }
 
-.chip.active .chip-mark {
-    border-color: var(--chip-color);
-    background: var(--chip-color);
-}
-
-.chip.active .chip-mark::after {
-    transform: translate(-50%, -50%) scale(1);
-    background: var(--white);
-}
-
 .chip:active {
     transform: scale(0.97);
 }
