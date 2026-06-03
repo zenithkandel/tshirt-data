@@ -131,6 +131,11 @@
                             <option value="Ratnachuli">Ratnachuli</option>
                             <option value="Choyu">Choyu</option>
                         </select>
+                        <select id="distFilter" class="filter-select" onchange="renderTable()">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="distributed">Distributed</option>
+                        </select>
                         <div class="sort-group">
                             <button onclick="sortData('rollNumber')" class="sort-btn" id="sortRoll">
                                 <i class="fa-sharp fa-thin fa-arrow-down-1-9"></i>
@@ -312,7 +317,11 @@
                 const matchesSearch = entry.name.toLowerCase().includes(searchTerm) ||
                     entry.rollNumber.toLowerCase().includes(searchTerm);
                 const matchesHouse = !currentHouseFilter || entry.house === currentHouseFilter;
-                return matchesSearch && matchesHouse;
+                const distFilter = document.getElementById('distFilter').value;
+                const matchesDist = !distFilter ||
+                    (distFilter === 'distributed' && entry.distributed) ||
+                    (distFilter === 'pending' && !entry.distributed);
+                return matchesSearch && matchesHouse && matchesDist;
             });
 
             filtered.sort((a, b) => {
